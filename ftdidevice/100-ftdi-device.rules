@@ -1,0 +1,12 @@
+
+#$ lsusb:
+#
+#Bus 001 Device 023: ID 0403:6001 Future Technology Devices International, Ltd FT232 USB-Serial (UART) IC
+#
+#I added the user to dialout and tty: 
+#$ sudo usermod -aG dialout $USER
+#$ sudo usermod -aG tty $USER
+#
+#But, the line in /etc/udev/rules.d/99-libftdi.rules, is different:
+
+ACTION=="add", SUBSYSTEM=="usb", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6001", OWNER="ostapenko", MODE="0777", GROUP="dialout"

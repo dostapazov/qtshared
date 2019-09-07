@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/multi_iodev_params">
+        <file alias="serial">SERIAL.png</file>
+        <file alias="tcp">tcp.png</file>
+        <file alias="udp">udp.png</file>
+        <file alias="usb">USB.png</file>
+        <file>apply.png</file>
+        <file>undo.png</file>
+    </qresource>
+</RCC>
