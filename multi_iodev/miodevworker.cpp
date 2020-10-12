@@ -97,8 +97,7 @@ bool QMultioDevWorker::is_connected()
 
 void QMultioDevWorker::handle_connect(bool connected)
 {
-
-  m_watchdog_value.store(m_watchdog_limit);
+    watchdog_reset();
   bool con_change ;
   {
    QMutexLocker l(&m_worker_mut) ;
@@ -156,7 +155,7 @@ bool  QMultioDevWorker::set_connection_string(const QString & conn_str)
 
 bool      QMultioDevWorker::do_device_open()
 {
-    m_watchdog_value.store(m_watchdog_limit);
+    watchdog_reset();
     if(m_iodev->create_device(connection_string()))
     {
         m_iodev->device()->moveToThread(m_thread);
@@ -214,7 +213,7 @@ void      QMultioDevWorker::do_device_close()
   if(device_is_open())
   {
     m_iodev->close();
-    m_watchdog_value.store(m_watchdog_limit);
+    watchdog_reset();
   }
 }
 

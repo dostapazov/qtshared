@@ -34,11 +34,12 @@ public:
 
     bool      check_watchdog ();
     int       watchdog_limit ()            { return m_watchdog_limit; }
-    void      set_watchdog_limit(int value){ m_watchdog_limit = value; m_watchdog_value.store(value);}
+    void      watchdog_reset ();
+    void      set_watchdog_limit(int value);
     bool      is_working();
 
-          void start_work (const QString & str);
-          void start_work ();
+    void start_work (const QString & str);
+    void start_work ();
           void stop_work  ();
           void operator <<(const QByteArray & data);
           bool device_is_open();
@@ -78,11 +79,25 @@ protected:
 
 };
 
-inline void      QMultioDevWorker::operator << (const QByteArray & data)
+inline void QMultioDevWorker::operator << (const QByteArray & data)
 {
   emit sig_dev_wite(data);
 }
 
+inline void QMultioDevWorker::watchdog_reset ()
+{
+#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
+    m_watchdog_value.storeRelaxed(m_watchdog_limit);
+#else
+    m_watchdog_value.store(m_watchdog_limit);
+#endif
+}
+
+inline void QMultioDevWorker::set_watchdog_limit(int value)
+{
+    m_watchdog_limit = value;
+    watchdog_reset();
+}
 
 
 
