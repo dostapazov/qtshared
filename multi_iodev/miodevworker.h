@@ -19,84 +19,84 @@
 
 
 
-class QMultioDevWorker:public QObject
+class QMultioDevWorker: public QObject
 {
-    Q_OBJECT
-    Q_DISABLE_COPY(QMultioDevWorker)
+	Q_OBJECT
+	Q_DISABLE_COPY(QMultioDevWorker)
 public:
-    explicit QMultioDevWorker(QObject * parent = Q_NULLPTR);
-    virtual ~QMultioDevWorker() override;
-    bool      is_connected();
-    QString   connection_string();
+	explicit QMultioDevWorker(QObject* parent = Q_NULLPTR);
+	virtual ~QMultioDevWorker() override;
+	bool      is_connected();
+	QString   connection_string();
 
-    virtual
-    bool      set_connection_string(const QString & conn_str);
+	virtual
+	bool      set_connection_string(const QString& conn_str);
 
-    bool      check_watchdog ();
-    int       watchdog_limit ()            { return m_watchdog_limit; }
-    void      watchdog_reset ();
-    void      set_watchdog_limit(int value);
-    bool      is_working();
+	bool      check_watchdog();
+	int       watchdog_limit()            { return m_watchdog_limit; }
+	void      watchdog_reset();
+	void      set_watchdog_limit(int value);
+	bool      is_working();
 
-    void start_work (const QString & str);
-    void start_work ();
-          void stop_work  ();
-          void operator <<(const QByteArray & data);
-          bool device_is_open();
+	void start_work(const QString& str);
+	void start_work();
+	void stop_work();
+	void operator <<(const QByteArray& data);
+	bool device_is_open();
 signals  :
-          void sig_receive     (QByteArray rcv_data);
-          void sig_connect     (bool);
-          void sig_device_error(QString error);
-          void sig_dev_wite    (QByteArray data);
+	void sig_receive(QByteArray rcv_data);
+	void sig_connect(bool);
+	void sig_device_error(QString error);
+	void sig_dev_wite(QByteArray data);
 
 protected:
 
-  virtual void device_write  (const void * data, int size);
-  virtual bool do_device_open();
-  virtual void do_device_close();
-  virtual void handle_connect(bool connected);
-  virtual void handle_recv   (const QByteArray & recv_data);
-  virtual void handle_thread_finish ();
-  virtual void handle_thread_start  ();
-  virtual void handle_write         (qint64 wr_bytes);
+	virtual void device_write(const void* data, int size);
+	virtual bool do_device_open();
+	virtual void do_device_close();
+	virtual void handle_connect(bool connected);
+	virtual void handle_recv(const QByteArray& recv_data);
+	virtual void handle_thread_finish();
+	virtual void handle_thread_start();
+	virtual void handle_write(qint64 wr_bytes);
 
 private slots:
-          void sl_ready_read  ();
-          void sl_writed      (qint64 bytes);
-          void sl_connected   ();
-          void sl_disconnected();
-          void sl_finished    ();
-          void sl_started     ();
-          void sl_dev_write   (QByteArray data);
+	void sl_ready_read();
+	void sl_writed(qint64 bytes);
+	void sl_connected();
+	void sl_disconnected();
+	void sl_finished();
+	void sl_started();
+	void sl_dev_write(QByteArray data);
 protected:
-    QMutex        m_worker_mut;
-    QString       m_connection_sting ;
-    bool          m_connected = false;
-    QThread     * m_thread    = Q_NULLPTR;
-    QMultiIODev * m_iodev     = Q_NULLPTR;
-    QAtomicInt    m_watchdog_value;
-    int           m_watchdog_limit = 3;
+	QMutex        m_worker_mut;
+	QString       m_connection_sting ;
+	bool          m_connected = false;
+	QThread*      m_thread    = Q_NULLPTR;
+	QMultiIODev* m_iodev     = Q_NULLPTR;
+	QAtomicInt    m_watchdog_value;
+	int           m_watchdog_limit = 3;
 
 };
 
-inline void QMultioDevWorker::operator << (const QByteArray & data)
+inline void QMultioDevWorker::operator <<(const QByteArray& data)
 {
-  emit sig_dev_wite(data);
+	emit sig_dev_wite(data);
 }
 
-inline void QMultioDevWorker::watchdog_reset ()
+inline void QMultioDevWorker::watchdog_reset()
 {
 #if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
-    m_watchdog_value.storeRelaxed(m_watchdog_limit);
+	m_watchdog_value.storeRelaxed(m_watchdog_limit);
 #else
-    m_watchdog_value.store(m_watchdog_limit);
+	m_watchdog_value.store(m_watchdog_limit);
 #endif
 }
 
 inline void QMultioDevWorker::set_watchdog_limit(int value)
 {
-    m_watchdog_limit = value;
-    watchdog_reset();
+	m_watchdog_limit = value;
+	watchdog_reset();
 }
 
 
