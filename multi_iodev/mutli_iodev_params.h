@@ -5,8 +5,6 @@
 #include <multi_iodev.hpp>
 #include "ui_mutli_iodev_params.h"
 
-
-
 class mutli_iodev_params : public QWidget,protected Ui::mutli_iodev_params
 {
     Q_OBJECT
@@ -22,17 +20,21 @@ public:
     void    enable_apply(bool enable);
     void    enable_undo (bool enable);
 
-
-
 signals:
     void    params_valid(bool);
     void    param_apply ();
     void    param_undo  ();
+
 public slots:
     bool    check_params_valid();
+
 private slots:
     void conn_type_changed(bool checked);
-    void conn_param_apply_undo ();
+    void conn_param_apply_undo();
+#ifndef Q_OS_ANDROID
+    void scan_refresh();
+#endif
+
 protected:
     virtual void showEvent(QShowEvent * event) override;
     void set_network_params(const QString & param_str);

@@ -65,6 +65,9 @@ mutli_iodev_params::mutli_iodev_params(QWidget *parent) :
     tbTcp->setChecked(true);
     emit tbTcp->clicked();
 
+#ifndef Q_OS_ANDROID
+    connect(tbRefresh, &QAbstractButton::clicked, this, &mutli_iodev_params::scan_refresh);
+#endif
 }
 
 
@@ -208,6 +211,10 @@ void mutli_iodev_params::set_network_params(const QString & param_str)
   QString     port;
   if(sl.count()>0) addr = sl[0].trimmed();
   if(sl.count()>1) port = sl[1].trimmed();
+  if (addr.isEmpty())
+      addr = "192.168.1.237";
+  if (port.isEmpty())
+      port = "5000";
   //qApp->processEvents();
   this->host_addr->setText (addr);
   this->host_port->setValue(port.toInt());
@@ -583,5 +590,12 @@ QAbstractButton *mutli_iodev_params::interface_button(QMultiIODev::conn_types_t 
  return btn ;
 }
 
-
-
+#ifndef Q_OS_ANDROID
+void mutli_iodev_params::scan_refresh()
+{
+    if (tbSerial->isChecked())
+        scan_serial_port();
+    if (tbFtdi->isChecked())
+        scan_ftdi();
+}
+#endif

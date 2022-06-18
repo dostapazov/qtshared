@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>416</width>
-    <height>360</height>
+    <width>420</width>
+    <height>366</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -17,7 +17,7 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string>Параметры подключения</string>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout_3">
    <item>
@@ -313,6 +313,17 @@
             </property>
             <property name="maxVisibleItems">
              <number>8</number>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="tbRefresh">
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="multi_iodev_params.qrc">
+              <normaloff>:/multi_iodev_params/refresh.png</normaloff>:/multi_iodev_params/refresh.png</iconset>
             </property>
            </widget>
           </item>

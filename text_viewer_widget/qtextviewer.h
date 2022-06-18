@@ -12,7 +12,7 @@ struct _text_line_t
   QColor  m_bcolor;
   QColor  m_fcolor;
   QString m_text;
-  _text_line_t(QString _text, QColor text_c, QColor bkc);
+  _text_line_t(const QString &_text, QColor text_c, QColor bkc);
   _text_line_t(const _text_line_t & other);
   _text_line_t & operator = (const _text_line_t & other);
 
@@ -68,7 +68,7 @@ private slots:
 
 };
 
-inline _text_line_t::_text_line_t(QString _text,QColor text_c,QColor bkc)
+inline _text_line_t::_text_line_t(const QString & _text,QColor text_c,QColor bkc)
                     :m_bcolor(bkc)
                     ,m_fcolor(text_c)
                     ,m_text  (_text)

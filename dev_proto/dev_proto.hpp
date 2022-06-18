@@ -80,7 +80,12 @@ using  lpcmd_hdr_t = cmd_hdr_t*;
 
 #pragma pack(pop)
 
-template <typename proto_hdr, typename crc_type_t = uint32_t>
+template <typename proto_hdr,
+#ifndef PROTOCOL_PT_LINE
+          typename crc_type_t = uint32_t>
+#else
+          typename crc_type_t = uint8_t>
+#endif
 class proto_buffer 
 {
  
