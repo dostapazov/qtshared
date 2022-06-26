@@ -123,8 +123,6 @@ void QTextViewer::start_repaint()
 void     QTextViewer::paintEvent(QPaintEvent* paint_event)
 {
     Q_UNUSED(paint_event);
-    qDebug() << Q_FUNC_INFO << " " << m_xstart << " " << m_ystart;
-
     m_max_len =  0;
     repaint_timer.stop();
 
