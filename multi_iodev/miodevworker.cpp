@@ -95,14 +95,20 @@ bool QMultioDevWorker::is_connected()
 
 
 
-void QMultioDevWorker::handle_connect(bool connected)
+void QMultioDevWorker::resetWatchDog()
 {
-
 #if QT_VERSION < QT_VERSION_CHECK(5,14,0)
     m_watchdog_value.store(m_watchdog_limit);
 #else
     m_watchdog_value.storeRelaxed(m_watchdog_limit);
 #endif
+
+}
+
+void QMultioDevWorker::handle_connect(bool connected)
+{
+
+    resetWatchDog();
     bool con_change ;
     {
         QMutexLocker l(&m_worker_mut) ;
@@ -162,11 +168,7 @@ bool  QMultioDevWorker::set_connection_string(const QString& conn_str)
 
 bool      QMultioDevWorker::do_device_open()
 {
-#if QT_VERSION < QT_VERSION_CHECK(5,14,0)
-    m_watchdog_value.store(m_watchdog_limit);
-#else
-    m_watchdog_value.storeRelaxed(m_watchdog_limit);
-#endif
+    resetWatchDog();
     if (m_iodev->create_device(connection_string()))
     {
         m_iodev->device()->moveToThread(m_thread);
@@ -222,11 +224,7 @@ void      QMultioDevWorker::do_device_close()
     if (device_is_open())
     {
         m_iodev->close();
-#if QT_VERSION < QT_VERSION_CHECK(5,14,0)
-        m_watchdog_value.store(m_watchdog_limit);
-#else
-        m_watchdog_value.storeRelaxed(m_watchdog_limit);
-#endif
+        resetWatchDog();
     }
 }
 
